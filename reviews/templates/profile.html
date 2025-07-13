@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - Product Review System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="fas fa-user-circle fa-5x text-primary mb-3"></i>
+                <h4>{{ user.username }}</h4>
+                <p class="text-muted">{{ user.email }}</p>
+                <span class="badge bg-primary">{{ user.role|title }} User</span>
+                <p class="mt-3"><small class="text-muted">Member since {{ user.date_joined|date:"M Y" }}</small></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>Your Reviews</h4>
+            </div>
+            <div class="card-body">
+                {% for review in user_reviews %}
+                <div class="border-bottom pb-3 mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6><a href="{% url 'product_detail' review.product.id %}">{{ review.product.name }}</a></h6>
+                        <div class="star-rating">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= review.rating %}
+                                    <i class="fas fa-star"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <p>{{ review.comment }}</p>
+                    <small class="text-muted">{{ review.created_at|date:"M d, Y" }}</small>
+                </div>
+                {% empty %}
+                <div class="text-center">
+                    <i class="fas fa-comment-slash fa-3x text-muted mb-3"></i>
+                    <h5>No reviews yet</h5>
+                    <p class="text-muted">Start reviewing products to see them here!</p>
+                    <a href="{% url 'products' %}" class="btn btn-primary">Browse Products</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
